@@ -1,0 +1,97 @@
+Copyright 2021 Arpasanu Emilia-Oana 311 CA (emilia.arpasanu@stud.acs.upb.ro)
+
+Algoritmul utilizeaza un vector ***v care va stoca matricele introduse
+in memorie si matricea **dim pentru memorarea dimensiunilor acestora
+(fiecare linie i din aceasta va contine numarul de linii si numarul de coloane
+ale matricei regasite pe pozitia i din vector). Initial,
+se citeste de la tastatura prima comanda si se aloca memorie pentru un element
+din vector, respectiv pentru matricea dimensiunilor. Cat timp nu s-a citit
+comanda 'Q' (care elibereaza toata memoria utilizata in cadrul programului)
+au loc o serie de operatii in cadrul vectorului de matrice:
+
+	- operatia de stocare a unei matrice in vector ("load", codificata cu 'L'):
+mai intai se mareste capacitatea vectorului si a matricei dimensiunilor cu o
+unitate in plus fata de capacitatea precedenta; apoi se aloca memorie pentru
+matricea ale carei dimensiuni se citesc (cu ajutorul functiei alloc_matrix())
+si pentru linia aferenta din matricea dimensiunilor ce le va retine;
+elementele continute de matrice se citesc prin intermediul functiei read_matrix()
+iar numarul total de elemente ale vectorului de matrice este incrementat (nr).
+
+	- operatia de afisare a unei matrice din vector
+("print", codificata cu 'P'):
+este indeplinita de functia print_matrix():
+daca pozitia matricei din vector pentru care se doreste determinarea
+elementelor respecta limitarea unui indice valid, elementele sunt afisate
+corespunzator; in caz contrar, se afiseaza un mesaj de eroare.
+
+	- operatia de determinare a dimensiunilor unei matrice din vector
+(codificata cu 'D'):
+este indeplinita de functia matrix_dimensions():
+daca indicele matricei pentru care se doreste afisarea dimensiunilor este unul
+corect, acestea sunt afisate; in caz contrar, un mesaj de eroare este afisat.
+
+	- operatia de redimensionare a unei matrice din vector
+("cut", codificata cu 'C'):
+este indeplinita de functia redimension_matrix():
+daca pozitia matricei pentru care se doreste redimensionarea este valida, se
+aloca memorie pentru o matrice auxiliara care va contine elementele de pe
+fiecare linie si coloana pentru care are loc operatia; memoria vechii matrice
+este dealocata (cu ajutorul functiei dealloc_matrix()), evitandu-se pierderile
+de memorie (intrucat cea noua va avea dimensiuni mai mici);
+dupa aceea, adresa noii matrice alocate este retinuta la adresa din vector
+a matricei redimensionate, astfel fiind simplificat transferul de elemente;
+altfel, daca indicele nu este unul corect, operatia nu poate fi realizata
+si se afiseaza un mesaj de eroare.
+
+	- operatia de inmultire a doua matrice din vector
+("multiply", codificata cu 'M'):
+daca se poate efectua operatia de inmultire a celor doua matrice (pozitiile lor
+din vector sunt concludente si dimensiunile acestora permit - fapt indicat
+de functia can_multiply()), se mareste capacitatea vectorului si a matricei
+dimensiunilor cu o unitate si este alocata memorie la sfarsitul vectorului
+pentru o noua matrice ce va contine rezultatul inmultirii dorite; apoi, 
+inmultirea efectiva are loc cu ajutorul functiei multiply_matrix(),
+fiind de asemenea retinute dimensiunile noii matrice obtinute si incrementat
+numarul total al elementelor din vector; altfel, daca cele doua conditii
+necesare nu sunt indeplinite, se afiseaza un mesaj de eroare corespunzator.
+
+	- operatia de sortare a matricelor memorate in vector (codificata cu 'O'):
+este indeplinita de functia sort_matrix() - complexitate O(n^2):
+algoritmul de sortare este bazat pe cel al sortarii prin interschimbare, avand
+drept criteriu ordinea crescatoare a sumelor matricelor stocate in vector
+(pentru claritate, acestea sunt memorate intr-un vector alocat local (sums) si
+calculate prin intermediul functiei sum_matrix()); in timpul parcurgerii
+vectorului, daca suma elementelor matricei de pe pozitia i (i>=0, i<=nr-2)
+este mai mare decat o matrice cu indicele j (j>=i+1, j<=nr-1), adresele
+corespunzatoare din vector ale acestora sunt interschimbate, precum si cele
+ale liniilor dimensiunilor lor; de asemenea, si sumele din vectorul sums sunt
+interschimbate, pentru asigurarea corectitudinii sortarii; la final, memoria
+acestuia este dealocata, intrucat existenta acestuia nu mai este necesara.
+
+	- operatia de transpunere a unei matrice din vector (codificata cu 'T'):
+este indeplinita de functia transpose_matrix():
+daca indicele matricei ce se doreste a fi transpusa este corect, se aloca
+memorie pentru o noua matrice, care va reprezenta matricea ceruta; apoi aceasta
+va stoca elementele transpusei matricei vechi, a carei memorie se dealoca,
+cu scopul de a se evita pierderile de memorie, caci dimensiunile se schimba;
+dupa aceea, adresa din vector a vechii matrice devine adresa transpusei,
+simplificandu-se transferul de elemente dintre acestea; in caz contrar, daca
+pozitia matricei nu exista, se afiseaza un mesaj corespunzator de eroare.
+
+	 - operatia de eliminare a unei matrice din vector (codificata cu 'F')
+este indeplinita de functia remove_matrix():
+daca pozitia matricei ce se doreste a fi stearsa este valida, se dealoca
+memoria pentru aceasta si pentru linia corespunzatoare din matricea
+dimensiunilor; apoi adresele matricelor aflate pe indicii urmatori sunt
+devansate cu cate o pozitie in vector in urma unei permutari circulare
+la stanga, precum si cele ale liniilor din matricea dimensiunilor, fiind astfel
+posibila umplerea golului determinat de eliminarea matricei;
+la sfarsit, numarul total de elemente al vectorului scade cu o unitate;
+in caz contrat, daca indicele matricei este incorect, se afiseaza
+un mesaj de eroare specific.
+
+Daca este citita o comanda necunoscuta (nu se regaseste in sirul de caractere
+commands, care le denumeste), este afisat un mesaj de eroare.
+
+In cele din urma, se dealoca pe rand fiecare matrice continuta de vector,
+apoi vectorul in sine si matricea dimensiunilor.
